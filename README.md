@@ -1,8 +1,8 @@
 # Monster-Counter
 A nice little tool for D&D dungeon masters to manage enemies. It includes autocompletion of official monsters, character sheets, conditions, some small personalisation options and looks neat. :)
-![overview](https://ibb.co/bRbCLdWD)
-![monster-sheet](https://ibb.co/p68W2mfH)
-![autocomplete](https://ibb.co/PZK3W1LP)
+![overview](https://i.ibb.co/YT018jRw/Screenshot-2025-12-14-002631.png)
+![monster-sheet](https://i.ibb.co/1Y5sZSrC/Screenshot-2025-12-14-002701.png)
+![autocomplete](https://i.ibb.co/Fb2NY8ry/Screenshot-2025-12-14-002733.png)
 
 # How to use
 A manual for non-technical people
