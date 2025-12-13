@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Monster Counter</title>
+        <style>
+            :root {
+                --bg: #1c1f2b;
+                --card: #2a3042;
+                --text: #f4f6fb;
+                --accent: #7c4dff;
+                --border: rgba(255, 255, 255, 0.08);
+
+                --heal: #1db954;
+                --damage: #e84a5f;
+                --injured: #f39c12;
+                --down: #7f8c8d;
+            }
+            * {
+                box-sizing: border-box;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+            body {
+                margin: 0;
+                background: radial-gradient(circle at top, #2c3450, #151826 60%);
+                color: var(--text);
+                display: flex;
+                justify-content: center;
+                min-height: 100vh;
+                padding: 24px;
+                font-size: larger;
+            }
+            .app {
+                width: 100%;
+                max-width: 1200px;
+                background: var(--card);
+                border: 1px solid var(--border);
+                border-radius: 16px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+                overflow: hidden;
+            }
+            header {
+                padding: 24px 28px;
+                background: linear-gradient(135deg, rgba(124, 77, 255, 0.18), rgba(124, 77, 255, 0.05));
+                border-bottom: 1px solid var(--border);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            header > h1 {
+                margin: 0;
+                position: fixed;
+                left: 50%;
+                transform: translateX(-50%);
+                font-size: 26px;
+                letter-spacing: 0.5px;
+            }
+            header > div > button {
+                width: auto;
+                padding: 0 16px;
+            }
+            header > div {
+                display: flex;
+                gap: 12px;
+            }
+            #monsterList {
+                margin: 0;
+                padding: 24px 28px 32px;
+                list-style: none;
+                overflow: scroll;
+                max-height: 80vh;
+                scrollbar-width: none;
+            }
+            #monsterList::-webkit-scrollbar {
+                display: none;
+            }
+            table {
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 0;
+                background: rgba(255, 255, 255, 0.01);
+                border: 1px solid var(--border);
+                border-radius: 12px;
+            }
+            th, td {
+                padding: 12px 10px;
+                text-align: center;
+                border-bottom: 1px solid var(--border);
+                color: var(--text);
+            }
+            th {
+                font-weight: 600;
+                background: rgba(124, 77, 255, 0.08);
+                letter-spacing: 0.2px;
+                width: 20%;
+            }
+            tr:last-child td {
+                border-bottom: none;
+            }
+            tr:nth-child(even) td {
+                background: rgba(255, 255, 255, 0.02);
+            }
+            .damage-cell {
+                display: flex;
+                gap: 8px;
+                justify-content: center;
+                align-items: center;
+            }
+            input {
+                text-align: center;
+                width: 100px;
+                padding: 6px 8px;
+                border: 1px solid var(--border);
+                border-radius: 6px;
+                background: rgba(255, 255, 255, 0.05);
+                color: var(--text);
+                font-size: 14px;
+                appearance: none;
+                -moz-appearance: textfield;
+            }
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+            button {
+                width: 100%;
+                height: 32px;
+                border: none;
+                border-radius: 6px;
+                background: var(--accent);
+                color: #fff;
+                font-weight: 600;
+                cursor: pointer;
+                transition: transform 0.05s ease, box-shadow 0.1s ease, background-color 0.4s ease;
+            }
+            button:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+            }
+            button:active {
+                transform: translateY(0);
+                box-shadow: none;
+            }
+            .damage-button {
+                background-color: var(--damage);
+                font-size: large;
+            }
+            .heal-button {
+                background-color: var(--heal);
+                font-size: large;
+            }
+            .condition-tag, .add-condition-tag {
+                background: transparent;
+                border-radius: 999px;
+                min-width: 80px;
+                padding: 4px;
+                margin: 2px;
+                border: 1px solid var(--border);
+                border-radius: 6px;
+            }
+            .green-button:hover {
+                background: var(--heal);
+            }
+            .red-button:hover {
+                background: var(--damage);
+            }
+            .grey-button:hover {
+                background: var(--down);
+            }
+            .name-cell {
+                font-weight: 600;
+            }
+            select {
+                width: 100%;
+                padding: 6px 8px;
+                border: 1px solid var(--border);
+                border-radius: 6px;
+                background: rgba(255, 255, 255, 0.05);
+                color: var(--text);
+                font-size: 14px;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="app">
+            <header>
+                <div>
+                </div>
+                <h1>Monster Counter</h1>
+                <div>
+                    <button class="red-button" onclick="clearMonsterList()">Clear</button>
+                    <button class="red-button" onclick="removeDeadMonstersFromList()">Remove Dead</button>
+                    <button class="green-button" onclick="addMonsterPrompt()">Add</button>
+                </div>
+            </header>
+            <div id="monsterList"></div>
+        </div>
+        <script>
+            const CONDITIONS = ['Blinded', 'Charmed', 'Deafened', 'Frightened', 'Grappled', 'Incapacitated', 'Invisible', 'Paralyzed', 'Petrified', 'Poisoned', 'Prone', 'Restrained', 'Stunned', 'Unconscious'];
+
+            let customConditions = getCustomConditionsFromLocalStorage();
+            let monsters = getMonstersFromLocalStorage();
+            
+            class Monster {
+                constructor(name, hp) {
+                    this.id = Date.now().toString() + Math.random().toString(36).substr(2, 9);
+                    this.name = name;
+                    this.hp = hp;
+                    this.maxhp = hp;
+                    this.conditions = []
+                }
+            }
+
+            function saveSettingsToLocalStorage() {
+                localStorage.setItem('settings', JSON.stringify(settings));
+            }
+
+            function getSettingsFromLocalStorage() {
+                return JSON.parse(localStorage.getItem('settings')) || {};
+            }
+
+            function getCustomConditionsFromLocalStorage() {
+                return JSON.parse(localStorage.getItem('customConditions')) || [];
+            }
+
+            function saveCustomConditionsToLocalStorage() {
+                localStorage.setItem('customConditions', JSON.stringify(customConditions));
+            }
+
+            // Edit Monster List Functions
+            function getMonstersFromLocalStorage() {
+                return JSON.parse(localStorage.getItem('monstersData')) || [];
+            }
+
+            function saveMonstersToLocalStorage() {
+                localStorage.setItem('monstersData', JSON.stringify(monsters));
+            }
+
+            function addMonsterToList(name, hp, amount) {
+                if (amount === 1) {
+                    monsters.push(new Monster(name, hp));
+                } else {
+                    for (let i = 0; i < amount; i++) {
+                        const monster = new Monster(`${name} ${i + 1}`, hp);
+                        monsters.push(monster);
+                    }
+                }
+                saveMonstersToLocalStorage();
+                updateTable();
+            }
+            
+            function removeMonsterFromList(id) {
+                monsters = monsters.filter(monster => monster.id !== id);
+                saveMonstersToLocalStorage();
+                updateTable();
+            }
+
+            function removeDeadMonstersFromList() {
+                monsters = monsters.filter(monster => monster.hp > 0);
+                saveMonstersToLocalStorage();
+                updateTable();
+            }
+
+            function clearMonsterList() {
+                monsters = [];
+                saveMonstersToLocalStorage();
+                updateTable();
+            }
+
+            // Edit Monster Functions
+            function updateMonsterHealth(monster, amount) {
+                monster.hp = Math.max(0, monster.hp + amount);
+                saveMonstersToLocalStorage();
+                updateTable();
+            }
+
+            function addMonsterCondition(monster, condition) {
+                if (!monster.conditions.includes(condition)) {
+                    monster.conditions.push(condition);
+                    saveMonstersToLocalStorage();
+                    updateTable();
+                }
+            }
+
+            function removeMonsterCondition(monster, condition) {
+                monster.conditions = monster.conditions.filter(c => c !== condition);
+                saveMonstersToLocalStorage();
+                updateTable();
+            }
+
+            // Components
+            function NameTableData(monster) {
+                const nameCell = document.createElement('td');
+                nameCell.className = 'name-cell';
+                nameCell.textContent = `${monster.hp > 0 ? '' : '💀  '}${monster.name}`;
+                nameCell.style.color = monster.hp > 0 ? 'inherit' : 'gray';
+                return nameCell;
+            }
+            
+            function HpTableData(monster) {
+                const hpCell = document.createElement('td');
+                hpCell.textContent = `${monster.hp > monster.maxhp ? `${monster.hp - monster.maxhp} + ` : ''}${Math.min(monster.hp, monster.maxhp)} / ${monster.maxhp}`;
+                return hpCell;
+            }
+            
+            function DamageTableData(monster) {
+                const damageCell = document.createElement('td');
+                const wrapper = document.createElement('div');
+                wrapper.className = 'damage-cell';
+                damageCell.appendChild(wrapper)
+
+                const input = document.createElement('input');
+                input.type = 'number';
+                input.min = '0';
+                input.placeholder = 'Amount';
+                input.title = "Enter to damage; Shift + Enter to heal";
+                input.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter') {
+                        const value = parseInt(input.value, 10);
+                        if (!isNaN(value)) {
+                            updateMonsterHealth(monster, event.shiftKey ? value : -value);
+                            input.value = '';
+                        }
+                    }
+                });
+
+                const damageButton = document.createElement('button');
+                damageButton.className = 'damage-button';
+                damageButton.onclick = () => {
+                    const value = parseInt(input.value, 10);
+                    if (!isNaN(value)) {
+                        updateMonsterHealth(monster, -value);
+                        input.value = '';
+                    } else if (input.value === '') {
+                        updateMonsterHealth(monster, -1);
+                    }
+                };
+                damageButton.textContent = '⮟';
+
+                const healButton = document.createElement('button');
+                healButton.className = 'heal-button';
+                healButton.onclick = () => {
+                    const value = parseInt(input.value, 10);
+                    if (!isNaN(value)) {
+                        updateMonsterHealth(monster, value);
+                        input.value = '';
+                    } else if (input.value === '') {
+                        updateMonsterHealth(monster, 1);
+                    }
+                };
+                healButton.textContent = '⮝';
+
+                wrapper.appendChild(healButton);
+                wrapper.appendChild(input);
+                wrapper.appendChild(damageButton);
+                return damageCell;
+            }
+
+            function StatusTableData(monster) {
+                const statusCell = document.createElement('td');
+                switch(true) {
+                    case (monster.hp <= 0):
+                        statusCell.textContent = 'Down';
+                        statusCell.style.color = 'var(--down)';
+                        break;
+                    case (monster.hp <= monster.maxhp / 4):
+                        statusCell.textContent = 'Badly Injured';
+                        statusCell.style.color = 'var(--damage)';
+                        break;
+                    case (monster.hp <= monster.maxhp / 2):
+                        statusCell.textContent = 'Injured';
+                        statusCell.style.color = 'var(--injured)';
+                        break;
+                    default:
+                        statusCell.textContent = 'Healthy';
+                        statusCell.style.color = 'var(--heal)';
+                }
+                return statusCell;
+            }
+
+            function ConditionsTableData(monster) {
+                const conditionsCell = document.createElement('td');
+                monster.conditions.forEach(condition => {
+                    conditionsCell.appendChild(ConditionTag(monster, condition));
+                });
+                conditionsCell.appendChild(AddConditionSelect(monster));
+                return conditionsCell;
+            }
+
+            function ConditionTag(monster, condition) {
+                const tag = document.createElement('button');
+                tag.className = 'condition-tag red-button';
+                tag.appendChild(document.createTextNode(condition));
+                tag.onclick = () => {
+                    removeMonsterCondition(monster, condition);
+                };
+                tag.onmouseover = () => {
+                    tag.textContent = "Remove";
+                };
+                tag.onmouseout = () => {
+                    tag.textContent = condition;
+                };
+                return tag;
+            }
+
+            function AddConditionSelect(monster) {
+                const select = document.createElement('select');
+                select.className = 'add-condition-tag green-button';
+                select.textContent = 'Add Condition';
+                const allConditions = CONDITIONS.concat(customConditions);
+                const remainingConditions = allConditions.sort().filter(c => !monster.conditions.includes(c));
+
+                if(remainingConditions.length === 0) {
+                    return document.createElement('div');
+                }
+
+                select.appendChild(new Option('Add Condition', '', true));
+                
+                remainingConditions.forEach(condition => {
+                    const option = new Option(condition, condition);
+                    select.appendChild(option);
+                });
+                
+                select.onchange = () => {
+                    if (select.value) {
+                        addMonsterCondition(monster, select.value);
+                        select.value = '';
+                    }
+                };
+
+                return select;
+            }
+
+            function MonsterTableRow(monster) {
+                const row = document.createElement('tr');                
+                row.appendChild(NameTableData(monster));
+                row.appendChild(ConditionsTableData(monster));
+                row.appendChild(StatusTableData(monster));
+                row.appendChild(HpTableData(monster));
+                row.appendChild(DamageTableData(monster));
+                return row;
+            }
+
+            function TableHeadersTableRow() {
+                const headerRow = document.createElement('tr');
+                ['Name', 'Conditions', 'Status', 'HP', 'Change HP'].forEach(header => {
+                    const th = document.createElement('th');
+                    th.textContent = header;
+                    headerRow.appendChild(th);
+                });
+                return headerRow;
+            }
+
+            // Others
+            function addMonsterPrompt() {
+                const name = prompt('Enter monster name:');
+                const hp = parseInt(prompt('Enter monster HP:'), 10);
+                const amount = parseInt(prompt('Enter monster amount:', 0), 10);
+
+                if (name && !isNaN(hp) && !isNaN(amount)) {
+                    addMonsterToList(name, hp, amount);
+                } else {
+                    alert('Invalid input. Please try again.');
+                }
+            };
+
+            function openSettings() {
+                const popup = new PopUp("Settings", 400);
+                const form = document.createElement('form');
+                form.id = "settingsForm";
+                // Custom Conditions
+                form.appendChild(SettingsConditionTagArea());
+                const saveButton = document.createElement('button');
+                saveButton.textContent = 'Save';
+                saveButton.type = 'submit';
+                saveButton.form = 'settingsForm';
+                popup.appendChild(form);
+                popup.appendChild(saveButton);
+                popup.open();
+            }
+
+            // Update Table
+            function updateTable() {
+                const monsterTable = document.getElementById('monsterList');
+                monsterTable.innerHTML = '';
+                monsters = getMonstersFromLocalStorage();
+                
+                const table = document.createElement('table');
+                table.style.borderCollapse = 'collapse';
+
+                table.appendChild(TableHeadersTableRow());
+                
+                monsters.forEach(monster => {
+                    table.appendChild(MonsterTableRow(monster));
+                });
+
+                monsterTable.appendChild(table);
+            }
+
+            updateTable();
+        </script>
+    </body>
+</html>

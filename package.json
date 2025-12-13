@@ -1,0 +1,9 @@
+{
+    "name": "monster-counter",
+    "version": "1.0.0",
+    "description": "A D&D monster counter tool",
+    "main": "main.html",
+    "scripts": {
+        "dev": "npx serve --no-port-switching"
+    }
+}
