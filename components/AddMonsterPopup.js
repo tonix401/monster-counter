@@ -6,7 +6,7 @@ export const AddMonsterPopup = () => {
     const nameInput = MonsterSuggestionInput((hp) => {
         hpInput.value = hp;
     });
-    const popup = new Popup("Add Monster", 300, () => nameInput.focus());
+    const popup = new Popup("Add Monster", 300, focusOnNameInput);
     popup.appendChild(nameInput);
 
     hpInput.type = "number";
@@ -41,11 +41,12 @@ export const AddMonsterPopup = () => {
     });
 
     const trySavingAndClose = () => {
-        const name = nameInput.childNodes[0].value.trim();
+        const nameInput = document.getElementById("monster-suggestion-input"); 
+        const name = nameInput.value.trim();
         const hp = parseInt(hpInput.value) || 1;
         const amount = parseInt(amountInput.value) || 1;
 
-        nameInput.childNodes[0].value = "";
+        nameInput.value = "";
         hpInput.value = "";
         amountInput.value = "";
 
@@ -60,4 +61,11 @@ export const AddMonsterPopup = () => {
     addButton.onclick = trySavingAndClose;
     popup.appendChild(addButton);
     return popup;
+}
+
+function focusOnNameInput() {
+    const nameInput = document.getElementById("monster-suggestion-input");
+    if (nameInput) {
+        nameInput.focus();
+    }
 }

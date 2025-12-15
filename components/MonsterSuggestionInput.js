@@ -2,6 +2,7 @@ export function MonsterSuggestionInput(changeHPInput) {
     const monsterNames = globalThis.infoService.getMonsterNames();
 
     const input = document.createElement("input");
+    input.id = "monster-suggestion-input";
     input.placeholder = "Name";
 
     const suggestionsContainer = document.createElement("div");

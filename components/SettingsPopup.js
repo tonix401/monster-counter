@@ -8,5 +8,6 @@ export function SettingsPopup() {
     popup.appendChild(SettingsRow("showHealth"));
     popup.appendChild(SettingsRow("showChangeHp"));
     popup.appendChild(SettingsRow("autoRemoveDead"));
+    popup.appendChild(SettingsRow("showXpCounter", globalThis.xpCounterService.hideXpCounter));
     return popup;
 }

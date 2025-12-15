@@ -1,4 +1,4 @@
-export function SettingsRow(id) {
+export function SettingsRow(id, onchange) {
     const value = settingsManager.getValue(id);
     const row = document.createElement("div");
     row.className = "settings-row";
@@ -12,6 +12,7 @@ export function SettingsRow(id) {
     input.checked = value;
     input.onchange = () => {
         settingsManager.setValue(id, input.checked);
+        if (onchange) onchange(input.checked);
     };
     row.appendChild(input);
     return row;

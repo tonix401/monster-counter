@@ -34,6 +34,12 @@ const SETTINGSCHEME = {
         type: 'boolean',
         default: false,
         value: false
+    },
+    showXpCounter: {
+        name: 'Show XP Counter',
+        type: 'boolean',
+        default: true,
+        value: true
     }
 }
 

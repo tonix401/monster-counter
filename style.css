@@ -87,6 +87,7 @@ th {
     background: rgba(124, 77, 255, 0.08);
     letter-spacing: 0.2px;
     width: 20%;
+    user-select: none;
 }
 tr:last-child td {
     border-bottom: none;
@@ -115,7 +116,6 @@ input {
     appearance: none;
     -moz-appearance: textfield;
 }
-
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -168,8 +168,10 @@ button:active {
 .red-button:hover {
     background: var(--damage);
 }
-.grey-button:hover {
-    background: var(--down);
+.transparent-button {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
 }
 .name-cell {
     font-weight: 600;
@@ -317,4 +319,12 @@ select {
 }
 .attribute-row {
     margin: 4px 0;
+}
+#xp-counter {
+    font-weight: 600;
+    font-size: 18px;
+    align-self: center;
+}
+.settings-row > label {
+    user-select: none;
 }
