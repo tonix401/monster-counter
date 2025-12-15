@@ -21,7 +21,6 @@ body {
     justify-content: center;
     min-height: 100vh;
     padding: 24px;
-    font-size: larger;
 }
 .app {
     width: 100%;
@@ -40,13 +39,11 @@ header {
     align-items: center;
     justify-content: space-between;
 }
-header > h1 {
+header > h2 {
     margin: 0;
     position: fixed;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 26px;
-    letter-spacing: 0.5px;
 }
 header > div > button {
     width: auto;
@@ -69,6 +66,7 @@ header > div {
 }
 table {
     width: 100%;
+    table-layout: fixed;
     border-collapse: separate;
     border-spacing: 0;
     background: rgba(255, 255, 255, 0.01);
@@ -86,8 +84,8 @@ th {
     font-weight: 600;
     background: rgba(124, 77, 255, 0.08);
     letter-spacing: 0.2px;
-    width: 20%;
     user-select: none;
+    white-space: nowrap;
 }
 tr:last-child td {
     border-bottom: none;
@@ -112,7 +110,6 @@ input {
     border-radius: 6px;
     background: rgba(255, 255, 255, 0.05);
     color: var(--text);
-    font-size: 14px;
     appearance: none;
     -moz-appearance: textfield;
 }
@@ -148,12 +145,11 @@ button:active {
     background-color: var(--heal);
     font-size: large;
 }
-.condition-tag, .add-condition-tag {
+.condition-tag {
     background: transparent;
-    border-radius: 999px;
+    border-radius: 50%;
     min-width: 80px;
-    padding: 4px;
-    margin: 2px;
+    margin-bottom: 2px;
     border: 1px solid var(--border);
     border-radius: 6px;
 }
@@ -175,6 +171,7 @@ button:active {
 }
 .name-cell {
     font-weight: 600;
+    font-size: larger;
 }
 select {
     width: 100%;
@@ -183,8 +180,15 @@ select {
     border-radius: 6px;
     background: rgba(255, 255, 255, 0.05);
     color: var(--text);
-    font-size: 14px;
     text-align: center;
+    cursor: pointer;
+}
+option {
+    color: var(--card);
+}
+option:hover {
+    background: var(--accent);
+    color: var(--text);
 }
 .popup-window {
     position: fixed;
@@ -223,13 +227,9 @@ select {
 .settings-row {
     display: flex;
     flex-direction: row;
-    align-items: center;
     justify-content: space-between;
+    margin-top: 8px;
     width: 100%;
-    margin-top: 12px;
-}
-.setting-row > label {
-    user-select: none;
 }
 .settings-row > input[type="checkbox"] {
     width: 24px;
@@ -253,6 +253,9 @@ select {
     background: var(--accent);
     border-color: var(--accent);
 }
+.settings-row > label {
+    user-select: none;
+}
 .suggestions-container {
     position: fixed;
     width: 250px;
@@ -266,7 +269,6 @@ select {
     border: 1px solid var(--border);
     background: var(--card);
     color: var(--text);
-    font-size: 14px;
     cursor: pointer;
 }
 .suggestion-item:hover {
@@ -325,6 +327,30 @@ select {
     font-size: 18px;
     align-self: center;
 }
-.settings-row > label {
-    user-select: none;
+hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 12px 0;
+}
+.quick-actions-container {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+.icon-button {
+    vertical-align: middle;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    width: auto;
+    padding: 0 8px;
+}
+.icon-button > img {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    color: #fff;
+}
+#col-actions {
+    width: 120px;
 }

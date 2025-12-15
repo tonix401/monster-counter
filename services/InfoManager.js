@@ -1,4 +1,4 @@
-export class InfoService {
+export class InfoManager {
     constructor() {
         this.monsterIndex = {};
         this.monsterDetails = {};
@@ -60,7 +60,10 @@ export class InfoService {
     }
 
     saveMonsterDetailsToLocalStorage() {
-        localStorage.setItem("monsterDetails", JSON.stringify(this.monsterDetails));
+        localStorage.setItem(
+            "monsterDetails",
+            JSON.stringify(this.monsterDetails)
+        );
     }
 }
 

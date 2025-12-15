@@ -24,6 +24,8 @@ export const AddMonsterPopup = () => {
 
     nameInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") {
+            document.getElementById("suggestions-container").style.display =
+                "none";
             hpInput.focus();
         }
     });

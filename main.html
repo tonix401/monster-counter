@@ -11,9 +11,9 @@
             <header>
                 <div>
                     <button class="green-button" onclick="settingsPopup.open()" title="Open Settings">Settings</button>
-                    <button id="xp-counter" style="display: none;" title="Reset XP Counter" class="red-button transparent-button" onclick="xpCounterService.resetXp()">0 XP</button>
+                    <button id="xp-counter" style="display: none;" title="Reset XP Counter" class="red-button transparent-button" onclick="XpCounterManager.resetXp()">0 XP</button>
                 </div>
-                <h1>Monster Counter</h1>
+                <h2>Monster Counter</h2>
                 <div>
                     <button class="red-button" onclick="monsterManager.clear()" title="Clear all Monsters without applying XP">Clear</button>
                     <button class="red-button" onclick="monsterManager.killAll()" title="Kill all Monsters and apply XP">Kill All</button>
@@ -27,36 +27,38 @@
             import { MonsterManager } from './services/MonsterManager.js';
             import { AddMonsterPopup } from "./components/AddMonsterPopup.js";
             import { SettingsManager } from './services/SettingsManager.js';
-            import { InfoService } from './services/InfoService.js';
-            import { XpCounterService } from './services/XpCounterService.js';
+            import { InfoManager } from './services/InfoManager.js';
+            import { XpCounterManager } from './services/XpCounterManager.js';
 
             import { SettingsPopup } from "./components/SettingsPopup.js";
             import { TableHeadersTableRow } from './components/TableHeaderRow.js';
             import { MonsterTableRow } from './components/MonsterTableRow.js';
+            import { TableColgroup } from './components/TableColgroup.js';
 
             // Global Managers & Popups
-            globalThis.infoService = new InfoService();
+            globalThis.InfoManager = new InfoManager();
             globalThis.monsterManager = new MonsterManager();
             globalThis.settingsManager = new SettingsManager();
-            globalThis.xpCounterService = new XpCounterService();
+            globalThis.XpCounterManager = new XpCounterManager();
             globalThis.settingsPopup = SettingsPopup();
-            globalThis.infoService.updateMonsterIndex().then(() => {
+            globalThis.InfoManager.updateMonsterIndex().then(() => {
                 globalThis.addMonsterPopup = AddMonsterPopup();
             });
             
             // Create & Update Table
             globalThis.updateTable = () => {
-                const monsterTable = document.getElementById('monsterList');
-                monsterTable.innerHTML = '';
-                
+                const monsterListRoot = document.getElementById('monsterList');
+                monsterListRoot.innerHTML = '';
+
                 const table = document.createElement('table');
+                table.appendChild(TableColgroup());
                 table.appendChild(TableHeadersTableRow());
                 
                 monsterManager.monsters.forEach(monster => {
                     table.appendChild(MonsterTableRow(monster, monsterManager));
                 });
                 
-                monsterTable.appendChild(table);
+                monsterListRoot.appendChild(table);
             }
 
             globalThis.updateTable();

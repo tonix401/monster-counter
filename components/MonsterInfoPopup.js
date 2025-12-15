@@ -2,7 +2,7 @@ import { Popup } from "./Popup.js";
 
 export function MonsterInfoPopup(monsterDetailIndex) {
     const monsterDetails =
-        globalThis.infoService.getMonsterDetails(monsterDetailIndex);
+        globalThis.InfoManager.getMonsterDetails(monsterDetailIndex);
     if (!monsterDetails) {
         return new Popup("Monster details not found", 400);
     }

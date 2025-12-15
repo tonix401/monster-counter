@@ -1,4 +1,4 @@
-export class XpCounterService {
+export class XpCounterManager {
     constructor() {
         this.xp = this.getXpFromLocalStorage();
         this.updateXp(0);
@@ -37,7 +37,7 @@ export class XpCounterService {
     }
 }
 
-function animateXpCounter(oldXp, newXp, duration = 3000) {
+function animateXpCounter(oldXp, newXp, duration = 1500) {
     const xpCounter = document.getElementById("xp-counter");
     const startTime = performance.now();
 

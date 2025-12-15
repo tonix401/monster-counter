@@ -1,5 +1,5 @@
 export function MonsterSuggestionInput(changeHPInput) {
-    const monsterNames = globalThis.infoService.getMonsterNames();
+    const monsterNames = globalThis.InfoManager.getMonsterNames();
 
     const input = document.createElement("input");
     input.id = "monster-suggestion-input";
@@ -7,6 +7,7 @@ export function MonsterSuggestionInput(changeHPInput) {
 
     const suggestionsContainer = document.createElement("div");
     suggestionsContainer.style.display = "none";
+    suggestionsContainer.id = "suggestions-container";
     suggestionsContainer.classList.add("suggestions-container");
 
     const container = document.createElement("div");
@@ -69,9 +70,11 @@ export function MonsterSuggestionInput(changeHPInput) {
     input.addEventListener("change", async () => {
         if (!monsterNames.includes(input.value)) return;
 
-        const id = globalThis.infoService.getMonsterIdByName(input.value);
-        await globalThis.infoService.addMonsterDetails(id);
-        const details = globalThis.infoService.getMonsterDetails(id);
+        const id = globalThis.InfoManager.getMonsterIdByName(input.value);
+        if (!InfoManager.isMonsterDetailsAvailable(id)) {
+            await globalThis.InfoManager.addMonsterDetails(id);
+        }
+        const details = globalThis.InfoManager.getMonsterDetails(id);
         changeHPInput(details.hit_points);
     });
 

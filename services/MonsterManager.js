@@ -90,10 +90,16 @@ export class MonsterManager {
         this.monsters.forEach(async (monster, index) => {
             const delay = length > 5 ? Math.round((index * 1500) / length) : 0;
             setTimeout(() => {
-                this.updateMonsterHealth(monster.id, -monster.hp);
-                this.addMonsterXPToCounter(monster.id);
+                this.killMonster(monster.id);
             }, delay);
         });
+    }
+    
+    killMonster = (monsterId) => {
+        const monster = this.monsters.find((m) => m.id === monsterId);
+        if (!monster) return;
+        this.updateMonsterHealth(monsterId, -monster.hp);
+        this.addMonsterXPToCounter(monster.id);
     }
 
     addMonsterCondition = (monsterId, condition) => {
@@ -119,10 +125,10 @@ export class MonsterManager {
     addMonsterXPToCounter = (monsterId) => {
         const monster = this.monsters.find((m) => m.id === monsterId);
         if (!monster || monster.hasDiedAlready) return;
-        const monsterDetails = globalThis.infoService.getMonsterDetails(
+        const monsterDetails = globalThis.InfoManager.getMonsterDetails(
             monster.detailIndex
         );
-        globalThis.xpCounterService.updateXp(monsterDetails.xp);
+        globalThis.XpCounterManager.updateXp(monsterDetails.xp);
         monster.hasDiedAlready = true;
     };
 }

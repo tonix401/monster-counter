@@ -23,12 +23,6 @@ const SETTINGSCHEME = {
         default: true,
         value: true
     },
-    customConditions: {
-        name: 'Custom Conditions',
-        type: 'array',
-        default: [],
-        value: []
-    },
     autoRemoveDead: {
         name: 'Auto Remove Dead Monsters',
         type: 'boolean',
@@ -37,6 +31,12 @@ const SETTINGSCHEME = {
     },
     showXpCounter: {
         name: 'Show XP Counter',
+        type: 'boolean',
+        default: true,
+        value: true
+    },
+    showQuickActions: {
+        name: 'Show Quick Actions',
         type: 'boolean',
         default: true,
         value: true
