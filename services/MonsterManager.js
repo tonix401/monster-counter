@@ -131,4 +131,23 @@ export class MonsterManager {
         globalThis.XpCounterManager.updateXp(monsterDetails.xp);
         monster.hasDiedAlready = true;
     };
+
+    pushDownload = () => {
+        const data = {
+            xpCounter: globalThis.XpCounterManager.xpCounter,
+            monsterIndex: globalThis.InfoManager.monsterIndex,
+            monsterDetails: globalThis.InfoManager.monsterDetails,
+            settings: globalThis.settingsManager.settings,
+            monsters: this.monsters,
+            xp: globalThis.XpCounterManager.xp,
+        }
+        const dataJson = JSON.stringify(data, null, 2);
+        const blob = new Blob([dataJson], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "monster-counter-save-file.json";
+        link.click();
+        URL.revokeObjectURL(url);
+    }
 }
