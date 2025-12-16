@@ -1,0 +1,7 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <!-- Handle -->
+    <line x1="70" y1="70" x2="90" y2="90" stroke="currentColor" stroke-width="8" stroke-linecap="round" />
+
+    <!-- Circle (lens) -->
+    <circle cx="40" cy="40" r="28" fill="none" stroke="currentColor" stroke-width="8" />
+</svg>
